@@ -7,12 +7,27 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pushNotifications';
-  constructor(private swPush:SwPush){}
-  readonly VAPID_PUBLIC_KEY="BAcCa8QHyIi8rx51A4JSBS225Ur7OFP89C7i_9sEziM2gAPfDlaHfIYbogvOhK6wrrnulOfPZFX8Ih2qpUiEl5g";
-  subscribeToPushNotifications(){
-     this.swPush.requestSubscription({
-       serverPublicKey:this.VAPID_PUBLIC_KEY
-     })
-     .then()
+  onSubmit(){
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+    }
+  
+    // Let's check whether notification permissions have alredy been granted
+    else if (Notification.permission === "granted") {
+      // If it's okay let's create a notification
+      var notification = new Notification("Hello");
+    }
+  
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== 'denied' ) {
+      Notification.requestPermission(function (permission) {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          var notification = new Notification("Hello");
+        }
+      });
+    }
+  
   }
+ 
 }
